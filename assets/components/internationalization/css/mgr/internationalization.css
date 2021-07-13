@@ -1,0 +1,43 @@
+/* Should be moved to default theme. */
+.x-menu-item-icon {
+    left: 7px !important;
+    font-size: 14px !important;
+    line-height: 16px !important;
+    text-align: center !important;
+}
+
+/* Should be moved to default theme. */
+.x-btn-text .icon {
+    margin-right: 8px;
+}
+
+#modx-action-buttons .x-btn-branding {
+    background: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    color: #555555 !important;
+}
+
+.x-menu-icon-description {
+    display: block;
+    border-top: 1px solid #e4e4e4;
+    font-style: italic;
+    padding-top: 5px;
+    margin-top: 5px;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: .8;
+}
+
+.x-grid-icon {
+    cursor: pointer;
+    color: #555555;
+    font-size: 14px !important;
+    line-height: 16px !important;
+}
+
+.x-grid-icon + .x-grid-icon {
+    margin-left: 15px;
+}

@@ -1,0 +1,7 @@
+{
+  "name": "internationalization",
+  "version": "v1.0.0",
+  "require": {
+    "phpoffice/phpspreadsheet": "^1.14"
+  }
+}

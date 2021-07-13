@@ -1,0 +1,68 @@
+{
+    "name": "Internationalization",
+    "lowCaseName": "internationalization",
+    "description": "An internationalization solution for MODX Revolution.",
+    "author": "Oetzie.nl",
+    "version": "1.0.0-pl",
+    "package":{
+        "menus": [{
+            "text": "internationalization",
+            "description": "internationalization.desc",
+            "parent": "components",
+            "action": "home",
+            "permissions": "internationalization"
+        }],
+        "elements": {
+            "plugins": [{
+                "name": "Internationalization",
+                "file": "internationalization.plugin.php",
+                "events": [
+                    "OnLoadWebDocument",
+                    "OnDocFormRender",
+                    "OnResourceDuplicate",
+                    "OnEmptyTrash"
+                ]
+            }],
+            "snippets": [{
+                "name": "InternationalizationGetLanguages",
+                "file": "internationalizationgetlanguages.snippet.php"
+            }]
+        },
+        "systemSettings": [{
+            "key": "branding_url",
+            "value": "//www.oetzie.nl",
+            "area": "internationalization"
+        },{
+            "key": "branding_url_help",
+            "value": "//www.oetzie.nl",
+            "area": "internationalization"
+        },{
+            "key": "contexts",
+            "value": "[]",
+            "area": "internationalization"
+        },{
+            "key": "ip_provider",
+            "value": "",
+            "area": "internationalization"
+        },{
+            "key": "ip_provider_token",
+            "value": "",
+            "area": "internationalization"
+        },{
+            "key": "params",
+            "value": "",
+            "area": "internationalization"
+        }]
+    },
+    "build":{
+        "readme": "docs/readme.txt",
+        "license": "docs/license.txt",
+        "changelog": "docs/changelog.txt",
+        "resolver": {
+            "after": [
+                "tables.resolver.php",
+                "permissions.resolver.php"
+            ]
+        }
+    }
+}
