@@ -159,7 +159,7 @@ Ext.extend(Internationalization.grid.Resources, MODx.grid.Grid, {
         this.getBottomToolbar().changePage(1);
     },
     renderPageTitle: function(d, c, e) {
-        return '<a href="?a=resource/update&id=' + e.data.resource_id + '" title="' + _('edit') + '" class="x-grid-link">' + Ext.util.Format.htmlEncode(d) + '</a>';
+        return '<a href="?a=resource/update&id=' + e.data.id + '" title="' + _('edit') + '" class="x-grid-link">' + Ext.util.Format.htmlEncode(d) + '</a>';
     },
     renderBoolean: function(d, c) {
         c.css = parseInt(d) === 1 || d ? 'green' : 'red';

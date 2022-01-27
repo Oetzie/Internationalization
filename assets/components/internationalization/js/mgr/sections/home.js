@@ -194,18 +194,25 @@ Internationalization.window.ImportLexicons = function(config) {
             description : MODx.expandHelp ? '' : _('internationalization.label_namespace_desc'),
             name        : 'namespace',
             anchor      : '100%',
-            allowBlank  : false
+            allowBlank  : false,
+            listeners   : {
+                select      : {
+                    fn          : this.onHandleNamespace,
+                    scope       : this
+                }
+            }
         }, {
             xtype       : MODx.expandHelp ? 'label' : 'hidden',
             html        : _('internationalization.label_namespace_desc'),
             cls         : 'desc-under'
         }, {
-            xtype       : 'textfield',
+            xtype       : 'internationalization-combo-topic',
             fieldLabel  : _('internationalization.label_topic'),
             description : MODx.expandHelp ? '' : _('internationalization.label_topic_desc'),
             name        : 'topic',
             anchor      : '100%',
-            allowBlank  : false
+            allowBlank  : false,
+            id          : 'internationalization-combo-topic-import'
         }, {
             xtype       : MODx.expandHelp ? 'label' : 'hidden',
             html        : _('internationalization.label_topic_desc'),
@@ -229,6 +236,14 @@ Internationalization.window.ImportLexicons = function(config) {
     Internationalization.window.ImportLexicons.superclass.constructor.call(this, config);
 };
 
-Ext.extend(Internationalization.window.ImportLexicons, MODx.Window);
+Ext.extend(Internationalization.window.ImportLexicons, MODx.Window, {
+    onHandleNamespace: function(tf) {
+        var topic = Ext.getCmp('internationalization-combo-topic-import');
+
+        if (topic) {
+            topic.setNamespace(tf.getValue());
+        }
+    }
+});
 
 Ext.reg('internationalization-window-import-lexicons', Internationalization.window.ImportLexicons);

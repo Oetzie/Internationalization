@@ -2,6 +2,13 @@
 Internationalization
 ----------------------
 
+---------------------
+Version: 1.0.1-pl
+Released: 2022-01-27
+----------------------
+- id=undefined fix #1
+- Import translations topic field is not a selectbox #2
+
 ----------------------
 Version: 1.0.0-pl
 Released: 2020-06-29
