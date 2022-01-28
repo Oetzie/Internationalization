@@ -23,6 +23,8 @@ $_lang['setting_internationalization.ip_provider']              = 'IP API data p
 $_lang['setting_internationalization.ip_provider_desc']         = 'The IP API data provider, this can be \'ipstack\' or \'ipapi\'. If empty, IP API will not be used.';
 $_lang['setting_internationalization.ip_provider_token']        = 'IP API data provider key';
 $_lang['setting_internationalization.ip_provider_token_desc']   = 'The IP API data provider key.';
+$_lang['setting_internationalization.use_pdotools']             = 'Use pdoTools';
+$_lang['setting_internationalization.use_pdotools_desc']        = 'If true and pdoTools is installed, the chunks will be parsed by pdoTools. Default is "No".';
 
 $_lang['internationalization.resource']                         = 'Resource';
 $_lang['internationalization.resources']                        = 'Resources';

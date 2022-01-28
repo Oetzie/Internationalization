@@ -17,15 +17,12 @@ class InternationalizationGetLanguagesSnippet extends InternationalizationSnippe
     public $properties = [
         'id'                    => null,
 
-        'tpl'                   => '@FILE elements/chunks/item.chunk.tpl',
-        'tplWrapper'            => '@FILE elements/chunks/wrapper.chunk.tpl',
+        'tpl'                   => '@FILE elements/chunks/item.tpl',
+        'tplWrapper'            => '@FILE elements/chunks/wrapper.tpl',
         'tplCurrent'            => '',
 
         'skipCurrent'           => false,
-        'skipEmptyTranslation'  => false,
-
-        'usePdoTools'           => false,
-        'usePdoElementsPath'    => false
+        'skipEmptyTranslation'  => false
     ];
 
     /**

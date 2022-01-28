@@ -37,6 +37,11 @@
             "value": "//www.oetzie.nl",
             "area": "internationalization"
         },{
+            "type": "combo-boolean",
+            "key": "use_pdotools",
+            "value": "0",
+            "area": "internationalization"
+        },{
             "key": "contexts",
             "value": "[]",
             "area": "internationalization"

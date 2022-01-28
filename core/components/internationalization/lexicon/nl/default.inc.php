@@ -23,6 +23,8 @@ $_lang['setting_internationalization.ip_provider']              = 'IP API data p
 $_lang['setting_internationalization.ip_provider_desc']         = 'De IP API data provider, dit kan \'ipstack\' of \'ipapi\' zijn. Indien leeg zal IP API niet gebruikt worden.';
 $_lang['setting_internationalization.ip_provider_token']        = 'IP API data provider key';
 $_lang['setting_internationalization.ip_provider_token_desc']   = 'De IP API data provider key.';
+$_lang['setting_internationalization.use_pdotools']             = 'Gebruik pdoTools';
+$_lang['setting_internationalization.use_pdotools_desc']        = 'Indien ja en pdoTools is geinstalleerd, zullen de chunks geparsed worden door pdoTools. Standaard is "Nee".';
 
 $_lang['internationalization.resource']                         = 'Pagina';
 $_lang['internationalization.resources']                        = 'Pagina\'s';

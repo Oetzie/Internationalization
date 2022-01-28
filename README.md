@@ -5,8 +5,9 @@
 
 | Setting                  | Description                                                                  |
 |----------------------------|------------------------------------------------------------------------------|
-| internationalization.contexts | A valid JSON to group contexts. For example `[["web", "web-en", "web-de", "web-fr"], ["site-1", "site-2"]]`. |
+| internationalization.contexts | A valid JSON to group contexts. For example `[["web", "web-en", "web-de", "web-fr"], ["site-1", "site-2"]]`. If empty all contexts will be used. |
 | internationalization.params | A comma separated list of URL parameters to be sent along with the translation url. |
+| internationalization.use_pdotools | If yes and pdoTool is installed all chunks will be parsed by pdoTools. |
 
 ## InternationalizationGetLanguages snippet
 
@@ -22,8 +23,6 @@ to the language home.
 | tplCurrent | The template of the current language item. This can be a chunk name or prefixed with `@FILE` or `@INLINE`. |
 | skipCurrent | If set to `true` it will skip the current language. This can be set to `true` or `false`. |
 | skipEmptyTranslation | If set to `true` it will skip all not connected languages. This can be set to `true` or `false`. Default is `false`. |
-| usePdoTools | If `true` pdoTool will be used for the tpl's (Fenom is also available). `@FILE` and `@INLINE` are also available without PdoTools. Default is `false`. Default is `false`. |
-| usePdoElementsPath | If `true` pdoTools will use the `pdotools_elements_path` setting to locate the `@FILE` tpl's, otherwise the `core/components/form/` will be used as directory. Default is `false`. |
 
 ## Plug-ins
 

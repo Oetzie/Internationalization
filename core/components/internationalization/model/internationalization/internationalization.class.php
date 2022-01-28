@@ -55,6 +55,7 @@ class Internationalization
             'version'               => '1.0.1',
             'branding_url'          => $this->modx->getOption('internationalization.branding_url', null, ''),
             'branding_help_url'     => $this->modx->getOption('internationalization.branding_url_help', null, ''),
+            'use_pdotools'          => (bool) $this->modx->getOption('internationalization.use_pdotools', null, false),
             'contexts'              => json_decode($this->modx->getOption('internationalization.contexts', null, ''), true),
             'url_params'            => array_filter(explode(',', $this->modx->getOption('internationalization.params')))
         ], $config);
@@ -114,6 +115,59 @@ class Internationalization
         }
 
         return $this->modx->getOption($this->config['namespace'] . '.' . $key, $options, $default);
+    }
+
+    /**
+     * @access public.
+     * @param String $name.
+     * @param Array $properties.
+     * @return String.
+     */
+    public function getChunk($name, array $properties = [])
+    {
+        if ($this->config['use_pdotools'] && $pdoTools = $this->modx->getService('pdoTools')) {
+            return $pdoTools->getChunk($name, $properties);
+        }
+
+        $type = 'CHUNK';
+
+        if (strpos($name, '@') === 0) {
+            $type = substr($name, 1, strpos($name, ' ') - 1);
+            $name = ltrim(substr($name, strpos($name, ' ') + 1, strlen($name)));
+        }
+
+        switch (strtoupper($type)) {
+            case 'FILE':
+                $name = $this->config['core_path'] . $name;
+
+                if (file_exists($name)) {
+                    $chunk = $this->modx->newObject('modChunk', [
+                        'name' => $this->config['namespace'] . uniqid()
+                    ]);
+
+                    if ($chunk) {
+                        $chunk->setCacheable(false);
+
+                        return $chunk->process($properties, file_get_contents($name));
+                    }
+                }
+
+                break;
+            case 'INLINE':
+                $chunk = $this->modx->newObject('modChunk', [
+                    'name' => $this->config['namespace'] . uniqid()
+                ]);
+
+                if ($chunk) {
+                    $chunk->setCacheable(false);
+
+                    return $chunk->process($properties, $name);
+                }
+
+                break;
+        }
+
+        return $this->modx->getChunk($name, $properties);
     }
 
     /**
@@ -213,6 +267,7 @@ class Internationalization
                     }
                 }
             }
+
             $this->modx->log(modX::LOG_LEVEL_ERROR, '[Internationalization getVisitorLocation] Can\'t get user data for IP \'' . $ip . '\' from \'' . $provider . '\'.');
         }
 
@@ -232,52 +287,54 @@ class Internationalization
 
         $contexts   = array_shift($configs);
 
+        $criteria = $this->modx->newQuery('modContext');
+
+        $criteria->select($this->modx->getSelectColumns('modContext', 'modContext'));
+        $criteria->select($this->modx->getSelectColumns('modContextSetting', 'modContextSettingLocale', 'locale_', ['value']));
+        $criteria->select($this->modx->getSelectColumns('modContextSetting', 'modContextSettingLocaleAlias', 'locale_alias_', ['value']));
+        $criteria->select($this->modx->getSelectColumns('modContextSetting', 'modContextSettingIcon', 'icon_', ['value']));
+        $criteria->select($this->modx->getSelectColumns('modContextSetting', 'modContextSettingFallback', 'fallback_', ['value']));
+        $criteria->select($this->modx->getSelectColumns('modContextSetting', 'modContextSettingStatus', 'status_', ['value']));
+
+        $criteria->leftJoin('modContextSetting', 'modContextSettingLocale', [
+            '`modContextSettingLocale`.`key` = "locale"',
+            '`modContextSettingLocale`.`context_key` = `modContext`.`key`'
+        ]);
+
+        $criteria->leftJoin('modContextSetting', 'modContextSettingLocaleAlias', [
+            '`modContextSettingLocaleAlias`.`key` = "locale_alias"',
+            '`modContextSettingLocaleAlias`.`context_key` = `modContext`.`key`'
+        ]);
+
+        $criteria->leftJoin('modContextSetting', 'modContextSettingIcon', [
+            '`modContextSettingIcon`.`key` = "mgr_tree_icon_context"',
+            '`modContextSettingIcon`.`context_key` = `modContext`.`key`'
+        ]);
+
+        $criteria->leftJoin('modContextSetting', 'modContextSettingFallback', [
+            '`modContextSettingFallback`.`key` = "site_start"',
+            '`modContextSettingFallback`.`context_key` = `modContext`.`key`'
+        ]);
+
+        $criteria->leftJoin('modContextSetting', 'modContextSettingStatus', [
+            '`modContextSettingStatus`.`key` = "site_status"',
+            '`modContextSettingStatus`.`context_key` = `modContext`.`key`'
+        ]);
+
+        $criteria->where([
+            'modContext.key:!='     => $key,
+            'AND:modContext.key:!=' => 'mgr'
+        ]);
+
         if ($contexts) {
-            $criteria = $this->modx->newQuery('modContext');
-
-            $criteria->select($this->modx->getSelectColumns('modContext', 'modContext'));
-            $criteria->select($this->modx->getSelectColumns('modContextSetting', 'modContextSettingLocale', 'locale_', ['value']));
-            $criteria->select($this->modx->getSelectColumns('modContextSetting', 'modContextSettingLocaleAlias', 'locale_alias_', ['value']));
-            $criteria->select($this->modx->getSelectColumns('modContextSetting', 'modContextSettingIcon', 'icon_', ['value']));
-            $criteria->select($this->modx->getSelectColumns('modContextSetting', 'modContextSettingFallback', 'fallback_', ['value']));
-            $criteria->select($this->modx->getSelectColumns('modContextSetting', 'modContextSettingStatus', 'status_', ['value']));
-
-            $criteria->leftJoin('modContextSetting', 'modContextSettingLocale', [
-                '`modContextSettingLocale`.`key` = "locale"',
-                '`modContextSettingLocale`.`context_key` = `modContext`.`key`'
-            ]);
-
-            $criteria->leftJoin('modContextSetting', 'modContextSettingLocaleAlias', [
-                '`modContextSettingLocaleAlias`.`key` = "locale_alias"',
-                '`modContextSettingLocaleAlias`.`context_key` = `modContext`.`key`'
-            ]);
-
-            $criteria->leftJoin('modContextSetting', 'modContextSettingIcon', [
-                '`modContextSettingIcon`.`key` = "mgr_tree_icon_context"',
-                '`modContextSettingIcon`.`context_key` = `modContext`.`key`'
-            ]);
-
-            $criteria->leftJoin('modContextSetting', 'modContextSettingFallback', [
-                '`modContextSettingFallback`.`key` = "site_start"',
-                '`modContextSettingFallback`.`context_key` = `modContext`.`key`'
-            ]);
-
-            $criteria->leftJoin('modContextSetting', 'modContextSettingStatus', [
-                '`modContextSettingStatus`.`key` = "site_status"',
-                '`modContextSettingStatus`.`context_key` = `modContext`.`key`'
-            ]);
-
             $criteria->where([
-                'modContext.key:!=' => $key,
                 'modContext.key:IN' => $contexts
             ]);
-
-            $criteria->sortby('modContext.rank', 'ASC');
-
-            return $this->modx->getCollection('modContext', $criteria);
         }
 
-        return [];
+        $criteria->sortby('modContext.rank', 'ASC');
+
+        return $this->modx->getCollection('modContext', $criteria);
     }
 
     /**
