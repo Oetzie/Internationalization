@@ -65,6 +65,7 @@
         "changelog": "docs/changelog.txt",
         "resolver": {
             "after": [
+                "extras.resolver.php",
                 "tables.resolver.php",
                 "permissions.resolver.php"
             ]
